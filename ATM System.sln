@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36408.4 d17.14
+VisualStudioVersion = 17.14.36408.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ATM System", "ATM System\ATM System.vcxproj", "{D00E861C-15D3-4FD7-9C98-D82A314AFED6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "System", "System\System.vcxproj", "{558E84CD-6366-4CFA-B97F-8982A1A3D0BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D00E861C-15D3-4FD7-9C98-D82A314AFED6}.Debug|x64.ActiveCfg = Debug|x64
-		{D00E861C-15D3-4FD7-9C98-D82A314AFED6}.Debug|x64.Build.0 = Debug|x64
-		{D00E861C-15D3-4FD7-9C98-D82A314AFED6}.Debug|x86.ActiveCfg = Debug|Win32
-		{D00E861C-15D3-4FD7-9C98-D82A314AFED6}.Debug|x86.Build.0 = Debug|Win32
-		{D00E861C-15D3-4FD7-9C98-D82A314AFED6}.Release|x64.ActiveCfg = Release|x64
-		{D00E861C-15D3-4FD7-9C98-D82A314AFED6}.Release|x64.Build.0 = Release|x64
-		{D00E861C-15D3-4FD7-9C98-D82A314AFED6}.Release|x86.ActiveCfg = Release|Win32
-		{D00E861C-15D3-4FD7-9C98-D82A314AFED6}.Release|x86.Build.0 = Release|Win32
+		{558E84CD-6366-4CFA-B97F-8982A1A3D0BB}.Debug|x64.ActiveCfg = Debug|x64
+		{558E84CD-6366-4CFA-B97F-8982A1A3D0BB}.Debug|x64.Build.0 = Debug|x64
+		{558E84CD-6366-4CFA-B97F-8982A1A3D0BB}.Debug|x86.ActiveCfg = Debug|Win32
+		{558E84CD-6366-4CFA-B97F-8982A1A3D0BB}.Debug|x86.Build.0 = Debug|Win32
+		{558E84CD-6366-4CFA-B97F-8982A1A3D0BB}.Release|x64.ActiveCfg = Release|x64
+		{558E84CD-6366-4CFA-B97F-8982A1A3D0BB}.Release|x64.Build.0 = Release|x64
+		{558E84CD-6366-4CFA-B97F-8982A1A3D0BB}.Release|x86.ActiveCfg = Release|Win32
+		{558E84CD-6366-4CFA-B97F-8982A1A3D0BB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

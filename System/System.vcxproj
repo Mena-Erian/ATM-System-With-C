@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d00e861c-15d3-4fd7-9c98-d82a314afed6}</ProjectGuid>
-    <RootNamespace>ATMSystem</RootNamespace>
+    <ProjectGuid>{558e84cd-6366-4cfa-b97f-8982a1a3d0bb}</ProjectGuid>
+    <RootNamespace>System</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -124,10 +124,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="utils\myutils.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils\myutils.h" />
-    <ClInclude Include="utils\myutils.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
