@@ -21,9 +21,15 @@
     <ClCompile Include="utils\myutils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="utils\logutils.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils\myutils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\logutils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

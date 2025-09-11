@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "./utils/myutils.h"
+#include "./utils/logutils.h"
 
 
 int main()
@@ -26,7 +27,7 @@ int main()
 		fconfig = create_config_file(&config);
 	}
 	else config = read_config_file();
-	
+
 	/*
 		Network Check
 	*/
@@ -39,8 +40,9 @@ int main()
 	else
 	{
 		printf("Un reachable");
+
 	}
 
-	//fclose(fconfig) {};
+	//fclose(fconfig);
 	return 0;
 }
