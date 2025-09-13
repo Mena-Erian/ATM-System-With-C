@@ -4,24 +4,23 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
+#include <errno.h>
 
 #include "./myutils.h"
+#include "./logutils.h"
 
-
-
-#define CONFIG_FILE_PATH "./configs/atm_config.txt"
 
 struct Config create_default_config()
 {
 	struct Config df;
-
-	 strcpy(df.srver_ip, "192.168.1.1");
-	 strcpy(df.middleware, "Up");
-	 strcpy(df.software_varsion, "1.0.0");
+	strcpy(df.serverip, "192.168.1.1");
+	strcpy(df.middleware, "Up");
+	strcpy(df.software_version, "1.0.0");
 
 	/*df.srver_ip = "192.168.1.1";
 	df.middleware = "Up";
-	df.software_varsion = "1.0.0";*/
+	df.software_version = "1.0.0";*/
 
 	return df;
 }
@@ -34,38 +33,16 @@ FILE* create_config_file(struct Config* config)
 	{
 		fprintf(fconfig_ptr,
 			"ServerIP = %s\nMiddlewareState = %s\nSoftwareVersion = %s",
-			config->srver_ip,
+			config->serverip,
 			config->middleware,
-			config->software_varsion
+			config->software_version
 		);
 	}
 	return  fconfig_ptr;
 	//exsit(1);
 }
 
-FILE* create_file(char* file_name, char* input)
-{
-	FILE* fptr = fopen("./atm_config.txt", "w");
 
-	//char* srver_ip = "Server IP = 192.163.1.200";
-	//char* middle_Ware = "Middleware state = Up";
-	//char* software_varsion = "Software Version = 1.1";
-
-	fprintf(fptr, "%s", input);
-
-	return  fptr;
-}
-
-bool is_file_exist(char* file_name_with_path)
-{
-	FILE* file = fopen(file_name_with_path, "r");
-
-	if (file == NULL) return false;
-
-	fclose(file);
-
-	return true;
-}
 
 struct Config read_config_file()
 {
@@ -77,9 +54,9 @@ struct Config read_config_file()
 	char _[20];
 
 	//i will back to handle erros :)
-	(void)fscanf(fptr, "%s = %s", _, config.srver_ip);
+	(void)fscanf(fptr, "%s = %s", _, config.serverip);
 	(void)fscanf(fptr, "%s = %s", _, config.middleware);
-	(void)fscanf(fptr, "%s = %s", _, config.software_varsion);
+	(void)fscanf(fptr, "%s = %s", _, config.software_version);
 
 	/// printf("%s\n", _, config.srver_ip);
 	/// printf("%s\n", _, config.middleware);
@@ -89,13 +66,55 @@ struct Config read_config_file()
 	return config;
 }
 
-/*
-| Mode   | File Exists?                    | File Not Exists?     | Write Behavior with `fprintf`                                               |
-| ------ | ------------------------------- | -------------------- | --------------------------------------------------------------------------- |
-| `"w"`  | **Clears file** (old data lost) | **Creates new file** | Overwrites from start.                                                      |
-| `"w+"` | **Clears file**                 | **Creates new file** | Can read & write. Writing overwrites from start.                            |
-| `"a"`  | Opens at **end of file**        | Creates new file     | Always appends new data at the end. Old data kept.                          |
-| `"a+"` | Opens at **end of file**        | Creates new file     | Can read & write, but writes always go to end.                              |
-| `"r"`  | Opens existing                  | Error (NULL)         | **Cannot write** (read-only).                                               |
-| `"r+"` | Opens existing                  | Error (NULL)         | Can read & write. Writing starts at beginning (overwrites unless you seek). |
-*/
+bool ping(char serverip[20])
+{
+	FILE* fcmd_output;
+	char command[50];
+	char buffer[200];
+	bool is_reachable = false;
+
+	sprintf(command, "ping %s", serverip);
+
+	fcmd_output = _popen(command, "r");
+	if (fcmd_output == NULL)
+	{
+		perror("Popen Failed");
+		return false;
+	}
+
+	while (fgets(buffer, sizeof(buffer), fcmd_output) != NULL)
+	{
+		printf("%s", buffer);
+		if (strstr(buffer, "Reply from") != '\0')
+		{
+			is_reachable = true;
+			//print_ping_status(is_reachable); // if neaded
+			break;
+		}
+		is_reachable = false;
+	}
+
+	if (is_reachable == false)
+	{
+		log_error("network failure", NULL);
+		return false;
+	}
+
+	_pclose(fcmd_output);
+	return true;
+}
+
+void print_ping_status(bool is_reachable)
+{
+
+	if (is_reachable)
+	{
+		printf("success");
+	}
+	else
+	{
+		printf("Un reachable");
+	}
+}
+
+

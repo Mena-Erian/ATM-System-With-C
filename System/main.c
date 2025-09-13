@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
+
 
 #include "./utils/myutils.h"
 #include "./utils/logutils.h"
@@ -19,9 +23,11 @@ int main()
 	*/
 
 	FILE* fconfig;
+	FILE* fcmd_output;
 	struct Config config;
-	char command[100];
-	if (!is_file_exist("./configs/atm_config.txt"))
+
+	// i know that bad name << maybe will be make some enhancements in the futur
+	if (!is_this_file_name_exist("./configs/atm_config.txt"))
 	{
 		config = create_default_config();
 		fconfig = create_config_file(&config);
@@ -31,18 +37,31 @@ int main()
 	/*
 		Network Check
 	*/
-	sprintf(command, "ping -n 1 %s", config.srver_ip);
 
-	if (system(command) == 0)
+	if (strcmp(config.middleware, "Up") == 0)
 	{
-		printf("success");
+		print_ping_status(ping(config.serverip));
 	}
-	else
-	{
-		printf("Un reachable");
 
-	}
+	/// FILE* fp;
+	/// char buffer[1024];
+	/// 
+	/// // Execute the 'ls -l' command and read its output
+	/// fp = _popen("ping 8.8.8.8 -t", "r");
+	/// if (fp == NULL) {
+	/// 	perror("popen failed");
+	/// 	return 1;
+	/// }
+	/// 
+	/// // Read and print the output line by line
+	/// while (fgets(buffer, sizeof(buffer), fp) != NULL) {
+	/// 	printf("%s", buffer);
+	/// }
+	/// 
+	/// // Close the pipe
+	/// _pclose(fp);
 
 	//fclose(fconfig);
+
 	return 0;
 }
