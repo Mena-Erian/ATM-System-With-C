@@ -2,6 +2,9 @@
 #ifndef LOGSUTILS_H
 #define LOGSUTILS_H
 
+#define CONFIG_FILE_PATH "./configs/atm_config.txt"
+#define ERROR_FILE_PATH "./logs/atm_error.log"
+#define STATUS_FILE_PATH "./status/atm_app_status.txt"
 
 typedef enum FileMode
 {
@@ -42,9 +45,9 @@ static char* error_log_type[LOG_ERROR_LEN] = {
 };
 
 
-bool is_this_file_name_exist(char* file_name_with_path);
+bool is_file_exist(char* file_name_with_path);
 
-bool is_file_exist(FILE* fptr);
+bool is_null(FILE* fptr);
 
 void log_error(char* msg, char* details);
 

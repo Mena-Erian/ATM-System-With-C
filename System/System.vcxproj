@@ -131,6 +131,9 @@
     <ClInclude Include="utils\logutils.h" />
     <ClInclude Include="utils\myutils.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="status\atm_app_status.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

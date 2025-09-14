@@ -42,8 +42,6 @@ FILE* create_config_file(struct Config* config)
 	//exsit(1);
 }
 
-
-
 struct Config read_config_file()
 {
 	FILE* fptr = fopen(CONFIG_FILE_PATH, "r");
@@ -60,10 +58,44 @@ struct Config read_config_file()
 
 	/// printf("%s\n", _, config.srver_ip);
 	/// printf("%s\n", _, config.middleware);
-	/// printf("%s\n", _, config.software_varsion);
+	/// printf("%s\n", _, config.software_version);
 
 	fclose(fptr);
 	return config;
+}
+
+void check_app_status(APP_STATUS app_status)
+{
+	if (app_status == STOPPED)
+	{
+		printf("Application Down");
+		log_error(error_log_type[LOG_APP_STOPPED], "Application Down");	
+		exit(1);
+	}
+}
+
+APP_STATUS read_app_status()
+{
+	// that just default value maybe we should change it in the future (based on business)
+	APP_STATUS app_status = STOPPED;
+	FILE* fptr = open_file(STATUS_FILE_PATH, READ);
+	char buffer[10] = "";
+
+	if (fscanf(fptr, "%s", buffer) == 1)
+	{
+		//printf("%s", buffer);
+		if (_stricmp(buffer, app_status_type[RUNNING]) == 0)
+		{
+			app_status = RUNNING;
+			return app_status;
+		}
+		else if (_stricmp(buffer, app_status_type[STOPPED]) == 0)
+		{
+			app_status = STOPPED;
+			return app_status;
+		}
+	}
+	return app_status;
 }
 
 bool ping(char serverip[20])
@@ -85,6 +117,7 @@ bool ping(char serverip[20])
 	while (fgets(buffer, sizeof(buffer), fcmd_output) != NULL)
 	{
 		//printf("%s", buffer); // to see the output of ping in console
+		printf("Network Checking...\n");
 		if (strstr(buffer, "Reply from") != '\0')
 		{
 			is_reachable = true;
@@ -93,7 +126,7 @@ bool ping(char serverip[20])
 		}
 		is_reachable = false;
 	}
-
+	system("cls");
 	if (is_reachable == false)
 	{
 		log_error(error_log_type[LOG_NETWORK_FAILURE], NULL);

@@ -25,7 +25,7 @@ int main()
 	// FILE* fconfig;
 	// FILE* fcmd_output;
 	struct Config config;
-
+	APP_STATUS app_status;
 	/// // i know that bad name << maybe will be make some enhancements in the futur
 	/// if (!is_this_file_name_exist("./configs/atm_config.txt"))
 	/// {
@@ -41,10 +41,11 @@ int main()
 	{
 		if (ping(config.serverip) == false)
 		{
-			printf("Error: Network Fauilar");
+			printf("Error: Network Failure\n");
 			//exit(1);
 		}
-		
+		app_status = read_app_status();
+		check_app_status(app_status);
 	}
 
 	/// FILE* fp;

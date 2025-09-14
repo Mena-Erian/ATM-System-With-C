@@ -12,7 +12,7 @@
 
 
 
-bool is_this_file_name_exist(char* file_name_with_path)
+bool is_file_exist(char* file_name_with_path)
 {
 	FILE* file = fopen(file_name_with_path, "r");
 
@@ -23,36 +23,10 @@ bool is_this_file_name_exist(char* file_name_with_path)
 	return true;
 }
 
-bool is_file_exist(FILE* fptr)
+bool is_null(FILE* fptr)
 {
 	if (fptr == NULL) return false;
 	return true;
-}
-
-long get_last_number_in_file(FILE* fptr)
-{
-	fseek(fptr, 0, SEEK_END); // go to the end of line
-	long ptr_position = ftell(fptr); //get the possition of pointer in file
-
-	while (ptr_position > 0)
-	{
-		fseek(fptr, --ptr_position, SEEK_END);
-		if (fgetc(fptr) == '\n')
-		{
-			break;
-		}
-	}
-
-	//ptr_position = the start of last line
-
-	char* buffer[150];
-	long number = 0;
-	if (fgets(buffer, sizeof(buffer), fptr) != NULL)
-	{
-		if (sscanf(buffer, "%d", &number) == 1) // return 1 if found number and zero if not
-			return number;
-	}
-	return number;
 }
 
 void log_error(char* msg, char* details) {
@@ -76,13 +50,12 @@ void log_error(char* msg, char* details) {
 	return;
 }
 
-
-// Maybe Retrun NULL !!
+// Maybe Return NULL !!
 FILE* log_into(char* file_name_with_path, char* input)
 {
 	FILE* fptr = open_file(file_name_with_path, APPEND | READ);
 
-	if (is_file_exist(fptr))
+	if (is_null(fptr))
 	{
 		fprintf(fptr, input);
 		return fptr;
@@ -119,6 +92,7 @@ FILE* open_file(char* file_name_with_path, FileMode mode)
 	return  fptr;
 }
 
+
 /*
 | Mode   | File Exists?                    | File Not Exists?     | Write Behavior with `fprintf`                                               |
 | ------ | ------------------------------- | -------------------- | --------------------------------------------------------------------------- |
@@ -153,4 +127,34 @@ FILE* open_file(char* file_name_with_path, FileMode mode)
 /// 	else perror(input);
 /// 	return fptr;
 /// }
+*/
+
+/*
+/// long get_last_number_in_file(FILE* fptr)
+/// {
+/// 	fseek(fptr, 0, SEEK_END); // go to the end of line
+/// 	long ptr_position = ftell(fptr); //get the possition of pointer in file
+///
+/// 	while (ptr_position > 0)
+/// 	{
+/// 		fseek(fptr, --ptr_position, SEEK_END);
+/// 		if (fgetc(fptr) == '\n')
+/// 		{
+/// 			break;
+/// 		}
+/// 	}
+///
+/// 	//ptr_position = the start of last line
+///
+/// 	char* buffer[150];
+/// 	long number = 0;
+/// 	if (fgets(buffer, sizeof(buffer), fptr) != NULL)
+/// 	{
+/// 		if (sscanf(buffer, "%d", &number) == 1) // return 1 if found number and zero if not
+/// 			return number;
+/// 	}
+/// 	return number;
+/// }
+
+
 */
