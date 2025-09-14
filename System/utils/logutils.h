@@ -35,13 +35,15 @@ typedef enum {
 	LOG_NETWORK_FAILURE,
 	LOG_APP_STOPPED,
 	LOG_CONFIG_ERROR,
+	LOG_UPDATE_REQUIRED,
 	LOG_ERROR_LEN
 } LOG_ERROR_TYPE;
 
 static char* error_log_type[LOG_ERROR_LEN] = {
 	"network failure",
 	"app stopped",
-	"config error"
+	"config error",
+	"update required"
 };
 
 

@@ -26,8 +26,6 @@ int main()
 	// FILE* fcmd_output;
 	struct Config config;
 	APP_STATUS app_status;
-	
-
 
 	config = read_config_file();
 	// Network Check
@@ -40,6 +38,7 @@ int main()
 		}
 		app_status = read_app_status();
 		check_app_status(app_status);
+		check_software_version(config);
 	}
 
 	/// FILE* fp;

@@ -47,6 +47,8 @@ static char* app_config_file_type[APP_CONFIG_FILE_MEMBERS_LEN] = {
 
 void check_config_file_member_key(char* finput, APP_CONFIG_FILE_MEMBERS member);
 
+void check_software_version(struct Config config);
+
 void check_app_status(APP_STATUS app_status);
 
 APP_STATUS read_app_status();

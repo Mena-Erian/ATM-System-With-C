@@ -110,16 +110,32 @@ struct Config read_config_file()
 	return config;
 }
 
+void check_software_version(struct Config config)
+{
+	printf("Software Version Check...");
 
+	char temp_buffer[250];
+	double version = strtod(config.software_version, &temp_buffer);
+	//printf("%.2f\n", version);
+	*temp_buffer = "";
+	sprintf(temp_buffer, "The Present Version is %.2f ", version);
+	if (version < 2.0)
+	{
+		printf("Update Required\n");
+		log_error(error_log_type[LOG_UPDATE_REQUIRED], &temp_buffer);
+	}
+}
 
 void check_app_status(APP_STATUS app_status)
 {
+	printf("App Helth Check...");
 	if (app_status == STOPPED)
 	{
 		printf("Application Down...");
 		log_error(error_log_type[LOG_APP_STOPPED], "Application Down");
 		exit(1);
 	}
+	system("cls");
 }
 
 APP_STATUS read_app_status()
