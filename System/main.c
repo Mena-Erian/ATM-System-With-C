@@ -14,31 +14,50 @@
 
 int main()
 {
-	/*
-		check if config file exist
-			if true:
-				read
-				false:
-				make one with default values
-	*/
-
-	// FILE* fconfig;
-	// FILE* fcmd_output;
 	struct Config config;
 	APP_STATUS app_status;
 
 	config = read_config_file();
-	// Network Check
+
 	if (strcmp(config.middleware, "Up") == 0)
 	{
-		if (ping(config.serverip) == false)
+		char choise;
+		do
 		{
-			printf("Error: Network Failure\n");
-			//exit(1);
-		}
-		app_status = read_app_status();
-		check_app_status(app_status);
-		check_software_version(config);
+			print_menu_admin();
+
+			int operation_number = 0;
+			scanf_s("%i", &operation_number);
+			switch (operation_number)
+			{
+			case 1: // Network Check
+				if (ping(config.serverip)) printf("\nYour in good Network Connection :)");
+				else printf("\nError: Network Failure :(\n");
+				break;
+			case 2: // App Health Check
+				app_status = read_app_status();
+				if (check_app_status(app_status) == true) printf("\nYour App Statis is: %s.", app_status_type[RUNNING]);
+				break;
+			case 3: // Read Logs Error
+				(void)print_loged_errors(ERROR_FILE_PATH);
+				break;
+			case 4:	//Check Version
+				check_software_version(config);
+				break;
+			
+			default:
+				system("cls");
+				printf("Your Input Was Not Valid, try again..\n");
+			}
+
+			printf("\n\nTo show menu again press any key Enter and to exit click Esc\n");
+			while ((getchar()) != '\n'); // flush leftover newline
+			choise = getchar(); //
+
+			//getchar();
+			//scanf(" %c", &choise);   // note the SPACE before %c -> skips \n, \t, etc.
+
+		} while ((int)choise != 27);
 	}
 
 	/// FILE* fp;

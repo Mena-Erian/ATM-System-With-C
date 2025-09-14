@@ -45,11 +45,15 @@ static char* app_config_file_type[APP_CONFIG_FILE_MEMBERS_LEN] = {
 	"SoftwareVersion"
 };
 
+void print_menu_admin();
+
 void check_config_file_member_key(char* finput, APP_CONFIG_FILE_MEMBERS member);
 
 void check_software_version(struct Config config);
 
-void check_app_status(APP_STATUS app_status);
+bool admin_modify_version();
+
+bool check_app_status(APP_STATUS app_status);
 
 APP_STATUS read_app_status();
 

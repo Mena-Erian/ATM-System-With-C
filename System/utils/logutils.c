@@ -92,7 +92,25 @@ FILE* open_file(char* file_name_with_path, FileMode mode)
 	return  fptr;
 }
 
+void print_loged_errors(char* file_name_with_path)
+{
+	FILE* fptr = open_file(file_name_with_path, READ);
+	char buffer[100] = "";
+	printf("\n");
 
+	if (!is_null(fptr))
+	{
+		printf("ERROR: file is not exist.");
+		log_error(error_log_type[LOG_CONFIG_ERROR], "File Not Exist.");
+		exit(1);
+	}
+	while (fgets(buffer, sizeof(buffer), fptr) != NULL)
+	{
+		printf("%s", buffer);
+	}
+
+	fclose(fptr);
+}
 
 /*
 | Mode   | File Exists?                    | File Not Exists?     | Write Behavior with `fprintf`                                               |

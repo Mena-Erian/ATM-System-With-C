@@ -46,7 +46,6 @@ static char* error_log_type[LOG_ERROR_LEN] = {
 	"update required"
 };
 
-
 bool is_file_exist(char* file_name_with_path);
 
 bool is_null(FILE* fptr);
@@ -54,6 +53,8 @@ bool is_null(FILE* fptr);
 void log_error(char* msg, char* details);
 
 FILE* log_into(char* file_name_with_path, char* input);
+
+void print_loged_errors(char* file_name_with_path);
 
 FILE* open_file(char* file_name_with_path, FileMode mode);
 

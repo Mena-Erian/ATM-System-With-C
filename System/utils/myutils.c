@@ -10,6 +10,19 @@
 #include "./myutils.h"
 #include "./logutils.h"
 
+void print_menu_admin()
+{
+	system("cls");
+	printf("---------------------- HELLO ADMING ----------------------\n\n");
+
+	printf("1. Network Check\n");
+	printf("2. App Health Check\n");
+	printf("3. Read Logs Error\n");
+	printf("4. Check Version\n");
+	printf("5. Modify In App Version\n");
+	
+	printf("\nPlease Enter the Number of Your Choose: ");
+}
 
 struct Config create_default_config()
 {
@@ -112,13 +125,13 @@ struct Config read_config_file()
 
 void check_software_version(struct Config config)
 {
-	printf("Software Version Check...");
-
+	printf("\nSoftware Version Check...\n");
 	char temp_buffer[250];
 	double version = strtod(config.software_version, &temp_buffer);
 	//printf("%.2f\n", version);
 	*temp_buffer = "";
-	sprintf(temp_buffer, "The Present Version is %.2f ", version);
+	sprintf(temp_buffer, "The Present Version is %.2f", version);
+	printf("Current Version is: %.2f\n",version);
 	if (version < 2.0)
 	{
 		printf("Update Required\n");
@@ -126,7 +139,15 @@ void check_software_version(struct Config config)
 	}
 }
 
-void check_app_status(APP_STATUS app_status)
+bool admin_modify_version() 
+{
+	system("cls");
+	printf("------- Modify In APP Version --------\n\n");
+	//printf("1")
+}
+ 
+
+bool check_app_status(APP_STATUS app_status)
 {
 	printf("App Helth Check...");
 	if (app_status == STOPPED)
@@ -135,7 +156,8 @@ void check_app_status(APP_STATUS app_status)
 		log_error(error_log_type[LOG_APP_STOPPED], "Application Down");
 		exit(1);
 	}
-	system("cls");
+	else return true;
+	//system("cls");
 }
 
 APP_STATUS read_app_status()
@@ -190,7 +212,7 @@ bool ping(char serverip[20])
 		}
 		is_reachable = false;
 	}
-	system("cls");
+	//system("cls");
 	if (is_reachable == false)
 	{
 		log_error(error_log_type[LOG_NETWORK_FAILURE], NULL);
