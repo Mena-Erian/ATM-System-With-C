@@ -4,24 +4,36 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
+#include <errno.h>
 
 #include "./myutils.h"
+#include "./logutils.h"
 
+void print_menu_admin()
+{
+	system("cls");
+	printf("---------------------- HELLO ADMING ----------------------\n\n");
 
+	printf("1. Network Check\n");
+	printf("2. App Health Check\n");
+	printf("3. Read Logs Error\n");
+	printf("4. Check Version\n");
+	printf("5. Modify In App Version\n");
 
-#define CONFIG_FILE_PATH "./configs/atm_config.txt"
+	printf("\nPlease Enter the Number of Your Choose: ");
+}
 
 struct Config create_default_config()
 {
 	struct Config df;
-
-	 strcpy(df.srver_ip, "192.168.1.1");
-	 strcpy(df.middleware, "Up");
-	 strcpy(df.software_varsion, "1.0.0");
+	strcpy(df.serverip, "192.168.1.1");
+	strcpy(df.middleware, "Up");
+	strcpy(df.software_version, "1.0.0");
 
 	/*df.srver_ip = "192.168.1.1";
 	df.middleware = "Up";
-	df.software_varsion = "1.0.0";*/
+	df.software_version = "1.0.0";*/
 
 	return df;
 }
@@ -34,68 +46,194 @@ FILE* create_config_file(struct Config* config)
 	{
 		fprintf(fconfig_ptr,
 			"ServerIP = %s\nMiddlewareState = %s\nSoftwareVersion = %s",
-			config->srver_ip,
+			config->serverip,
 			config->middleware,
-			config->software_varsion
+			config->software_version
 		);
 	}
 	return  fconfig_ptr;
 	//exsit(1);
 }
 
-FILE* create_file(char* file_name, char* input)
+void check_config_file_member_key(char* finput, APP_CONFIG_FILE_MEMBERS member)
 {
-	FILE* fptr = fopen("./atm_config.txt", "w");
+	if (_stricmp(finput, app_config_file_type[member]) == 0)
+	{
+		return member;
+	}
 
-	//char* srver_ip = "Server IP = 192.163.1.200";
-	//char* middle_Ware = "Middleware state = Up";
-	//char* software_varsion = "Software Version = 1.1";
-
-	fprintf(fptr, "%s", input);
-
-	return  fptr;
-}
-
-bool is_file_exist(char* file_name_with_path)
-{
-	FILE* file = fopen(file_name_with_path, "r");
-
-	if (file == NULL) return false;
-
-	fclose(file);
-
-	return true;
-}
+	char err_dtls[150] = "";
+	sprintf(err_dtls, "Cannot Read %s From Config file", app_config_file_type[member]);
+	printf(err_dtls);
+	log_error(error_log_type[LOG_CONFIG_ERROR], err_dtls);
+	exit(1);
+};
 
 struct Config read_config_file()
 {
 	FILE* fptr = fopen(CONFIG_FILE_PATH, "r");
 
-	if (fptr == NULL)  return;
+	if (fptr == NULL) {
+		perror("Cannot Read Config file");
+		log_error(error_log_type[LOG_CONFIG_ERROR], "Cannot Read Config file");
+		exit(1);
+	}
+
 
 	struct Config config;
-	char _[20];
+	char config_key[20];
+	int temp_check;
 
 	//i will back to handle erros :)
-	(void)fscanf(fptr, "%s = %s", _, config.srver_ip);
-	(void)fscanf(fptr, "%s = %s", _, config.middleware);
-	(void)fscanf(fptr, "%s = %s", _, config.software_varsion);
+	temp_check = fscanf(fptr, "%s = %s", config_key, config.serverip);
+	if (temp_check == 1)
+	{
+		printf("Cannot Read Server ip from Config file");
+		log_error(error_log_type[LOG_CONFIG_ERROR], "Cannot Read Server ip from Config file");
+		exit(1);
+	};
+	check_config_file_member_key(config_key, CONF_SERVERIP);
+
+	temp_check = -1;
+	temp_check = fscanf(fptr, "%s = %s", config_key, config.middleware);
+	if (temp_check == 1)
+	{
+		printf("Cannot Read Middleware from Config file");
+		log_error(error_log_type[LOG_CONFIG_ERROR], "Cannot Read Middleware from Config file");
+		exit(1);
+	};
+
+	check_config_file_member_key(config_key, CONF_MIDDLEWARESTATE);
+
+	temp_check = -1;
+	temp_check = fscanf(fptr, "%s = %s", config_key, config.software_version);
+	if (temp_check == 1)
+	{
+		printf("Cannot Read Software Version from Config file");
+		log_error(error_log_type[LOG_CONFIG_ERROR], "Cannot Read Software Version from Config file");
+		exit(1);
+	};
+	check_config_file_member_key(config_key, CONF_SOFTWARE_VERSION);
 
 	/// printf("%s\n", _, config.srver_ip);
 	/// printf("%s\n", _, config.middleware);
-	/// printf("%s\n", _, config.software_varsion);
+	/// printf("%s\n", _, config.software_version);
 
 	fclose(fptr);
 	return config;
 }
 
-/*
-| Mode   | File Exists?                    | File Not Exists?     | Write Behavior with `fprintf`                                               |
-| ------ | ------------------------------- | -------------------- | --------------------------------------------------------------------------- |
-| `"w"`  | **Clears file** (old data lost) | **Creates new file** | Overwrites from start.                                                      |
-| `"w+"` | **Clears file**                 | **Creates new file** | Can read & write. Writing overwrites from start.                            |
-| `"a"`  | Opens at **end of file**        | Creates new file     | Always appends new data at the end. Old data kept.                          |
-| `"a+"` | Opens at **end of file**        | Creates new file     | Can read & write, but writes always go to end.                              |
-| `"r"`  | Opens existing                  | Error (NULL)         | **Cannot write** (read-only).                                               |
-| `"r+"` | Opens existing                  | Error (NULL)         | Can read & write. Writing starts at beginning (overwrites unless you seek). |
-*/
+void check_software_version(struct Config config)
+{
+	printf("\nSoftware Version Check...\n");
+	char temp_buffer[250];
+	double version = strtod(config.software_version, &temp_buffer);
+	//printf("%.2f\n", version);
+	*temp_buffer = "";
+	sprintf(temp_buffer, "The Present Version is %.2f", version);
+	printf("Current Version is: %.2f\n", version);
+	if (version < 2.0)
+	{
+		printf("Update Required\n");
+		log_error(error_log_type[LOG_UPDATE_REQUIRED], &temp_buffer);
+	}
+}
+
+bool admin_modify_version(struct Config *Config)
+{
+	double user_result = -1;
+	//scanf("\n\nPlease Enter the Version: %d", &user_result);
+
+}
+
+
+bool check_app_status(APP_STATUS app_status)
+{
+	printf("App Helth Check...");
+	if (app_status == STOPPED)
+	{
+		printf("Application Down...");
+		log_error(error_log_type[LOG_APP_STOPPED], "Application Down");
+		exit(1);
+	}
+	else return true;
+	//system("cls");
+}
+
+APP_STATUS read_app_status()
+{
+	// that just default value maybe we should change it in the future (based on business)
+	APP_STATUS app_status = STOPPED;
+	FILE* fptr = open_file(STATUS_FILE_PATH, READ);
+	char buffer[10] = "";
+
+	if (fscanf(fptr, "%s", buffer) == 1)
+	{
+		//printf("%s", buffer);
+		if (_stricmp(buffer, app_status_type[RUNNING]) == 0)
+		{
+			app_status = RUNNING;
+			return app_status;
+		}
+		else if (_stricmp(buffer, app_status_type[STOPPED]) == 0)
+		{
+			app_status = STOPPED;
+			return app_status;
+		}
+	}
+	return app_status;
+}
+
+bool ping(char serverip[20])
+{
+	FILE* fcmd_output;
+	char command[50];
+	char buffer[200];
+	bool is_reachable = false;
+
+	sprintf(command, "ping %s", serverip);
+
+	fcmd_output = _popen(command, "r");// may we can use here system() // put i used this to 
+	if (fcmd_output == NULL)
+	{
+		perror("Popen Failed");
+		return false;
+	}
+
+	while (fgets(buffer, sizeof(buffer), fcmd_output) != NULL)
+	{
+		//printf("%s", buffer); // to see the output of ping in console
+		printf("Network Checking...\n");
+		if (strstr(buffer, "Reply from") != '\0')
+		{
+			is_reachable = true;
+			//print_ping_status(is_reachable); // if needed
+			break;
+		}
+		is_reachable = false;
+	}
+	//system("cls");
+	if (is_reachable == false)
+	{
+		log_error(error_log_type[LOG_NETWORK_FAILURE], NULL);
+		return false;
+	}
+
+	_pclose(fcmd_output);
+	return true;
+}
+
+void print_ping_status(bool is_reachable)
+{
+
+	if (is_reachable)
+	{
+		printf("success");
+	}
+	else
+	{
+		printf("Un reachable");
+	}
+}
+
+

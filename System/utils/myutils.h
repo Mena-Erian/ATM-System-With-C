@@ -6,23 +6,59 @@
 /// struct Config {
 /// 	char* srver_ip;
 /// 	char* middleware;
-/// 	char* software_varsion;
+/// 	char* software_version;
 /// };
 
 struct Config {
-	char srver_ip[20];
+	char serverip[20];
 	char middleware[20];
-	char software_varsion[20];
+	char software_version[20];
 };
 
 struct Config create_default_config();
 
 FILE* create_config_file(struct Config* config_file);
 
-FILE* create_file(char* file_name, char* input);
-
 struct Config read_config_file();
 
-bool is_file_exist(char* file_name_with_path);
+typedef enum {
+	RUNNING,
+	STOPPED,
+	APP_STATUS_LEN
+} APP_STATUS;
+
+static char* app_status_type[APP_STATUS_LEN] = {
+   "RUNNING",
+   "STOPPED"
+};
+
+typedef enum {
+	CONF_SERVERIP,
+	CONF_MIDDLEWARESTATE,
+	CONF_SOFTWARE_VERSION,
+	APP_CONFIG_FILE_MEMBERS_LEN
+} APP_CONFIG_FILE_MEMBERS;
+
+static char* app_config_file_type[APP_CONFIG_FILE_MEMBERS_LEN] = {
+	"ServerIP",
+	"MiddlewareState",
+	"SoftwareVersion"
+};
+
+void print_menu_admin();
+
+void check_config_file_member_key(char* finput, APP_CONFIG_FILE_MEMBERS member);
+
+void check_software_version(struct Config config);
+
+bool admin_modify_version(struct Config *Config);
+
+bool check_app_status(APP_STATUS app_status);
+
+APP_STATUS read_app_status();
+
+bool ping(char serverip[20]);
+
+void print_ping_status(bool is_reachable);
 
 #endif // !MYUTILS_H
