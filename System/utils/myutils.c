@@ -20,7 +20,7 @@ void print_menu_admin()
 	printf("3. Read Logs Error\n");
 	printf("4. Check Version\n");
 	printf("5. Modify In App Version\n");
-	
+
 	printf("\nPlease Enter the Number of Your Choose: ");
 }
 
@@ -131,7 +131,7 @@ void check_software_version(struct Config config)
 	//printf("%.2f\n", version);
 	*temp_buffer = "";
 	sprintf(temp_buffer, "The Present Version is %.2f", version);
-	printf("Current Version is: %.2f\n",version);
+	printf("Current Version is: %.2f\n", version);
 	if (version < 2.0)
 	{
 		printf("Update Required\n");
@@ -139,13 +139,13 @@ void check_software_version(struct Config config)
 	}
 }
 
-bool admin_modify_version() 
+bool admin_modify_version(struct Config *Config)
 {
-	system("cls");
-	printf("------- Modify In APP Version --------\n\n");
-	//printf("1")
+	double user_result = -1;
+	//scanf("\n\nPlease Enter the Version: %d", &user_result);
+
 }
- 
+
 
 bool check_app_status(APP_STATUS app_status)
 {

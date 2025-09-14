@@ -51,7 +51,7 @@ void check_config_file_member_key(char* finput, APP_CONFIG_FILE_MEMBERS member);
 
 void check_software_version(struct Config config);
 
-bool admin_modify_version();
+bool admin_modify_version(struct Config *Config);
 
 bool check_app_status(APP_STATUS app_status);
 
