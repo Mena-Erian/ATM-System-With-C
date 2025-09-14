@@ -32,6 +32,21 @@ static char* app_status_type[APP_STATUS_LEN] = {
    "STOPPED"
 };
 
+typedef enum {
+	CONF_SERVERIP,
+	CONF_MIDDLEWARESTATE,
+	CONF_SOFTWARE_VERSION,
+	APP_CONFIG_FILE_MEMBERS_LEN
+} APP_CONFIG_FILE_MEMBERS;
+
+static char* app_config_file_type[APP_CONFIG_FILE_MEMBERS_LEN] = {
+	"ServerIP",
+	"MiddlewareState",
+	"SoftwareVersion"
+};
+
+void check_config_file_member_key(char* finput, APP_CONFIG_FILE_MEMBERS member);
+
 void check_app_status(APP_STATUS app_status);
 
 APP_STATUS read_app_status();

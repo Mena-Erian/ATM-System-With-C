@@ -26,13 +26,7 @@ int main()
 	// FILE* fcmd_output;
 	struct Config config;
 	APP_STATUS app_status;
-	/// // i know that bad name << maybe will be make some enhancements in the futur
-	/// if (!is_this_file_name_exist("./configs/atm_config.txt"))
-	/// {
-	/// 	config = create_default_config();
-	/// 	fconfig = create_config_file(&config);
-	/// }
-	/// else config = read_config_file();
+	
 
 
 	config = read_config_file();

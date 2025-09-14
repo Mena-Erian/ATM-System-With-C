@@ -93,6 +93,7 @@ FILE* open_file(char* file_name_with_path, FileMode mode)
 }
 
 
+
 /*
 | Mode   | File Exists?                    | File Not Exists?     | Write Behavior with `fprintf`                                               |
 | ------ | ------------------------------- | -------------------- | --------------------------------------------------------------------------- |

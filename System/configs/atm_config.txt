@@ -1,3 +1,3 @@
-ServerIP = 8.8.8.8
+Serverip = 8.8.8.8
 MiddlewareState = Up
 SoftwareVersion = 1.0.0

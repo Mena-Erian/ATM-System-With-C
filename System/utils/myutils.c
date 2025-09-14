@@ -42,19 +42,65 @@ FILE* create_config_file(struct Config* config)
 	//exsit(1);
 }
 
+void check_config_file_member_key(char* finput, APP_CONFIG_FILE_MEMBERS member)
+{
+	if (_stricmp(finput, app_config_file_type[member]) == 0)
+	{
+		return member;
+	}
+
+	char err_dtls[150] = "";
+	sprintf(err_dtls, "Cannot Read %s From Config file", app_config_file_type[member]);
+	printf(err_dtls);
+	log_error(error_log_type[LOG_CONFIG_ERROR], err_dtls);
+	exit(1);
+};
+
 struct Config read_config_file()
 {
 	FILE* fptr = fopen(CONFIG_FILE_PATH, "r");
 
-	if (fptr == NULL)  return;
+	if (fptr == NULL) {
+		perror("Cannot Read Config file");
+		log_error(error_log_type[LOG_CONFIG_ERROR], "Cannot Read Config file");
+		exit(1);
+	}
+
 
 	struct Config config;
-	char _[20];
+	char config_key[20];
+	int temp_check;
 
 	//i will back to handle erros :)
-	(void)fscanf(fptr, "%s = %s", _, config.serverip);
-	(void)fscanf(fptr, "%s = %s", _, config.middleware);
-	(void)fscanf(fptr, "%s = %s", _, config.software_version);
+	temp_check = fscanf(fptr, "%s = %s", config_key, config.serverip);
+	if (temp_check == 1)
+	{
+		printf("Cannot Read Server ip from Config file");
+		log_error(error_log_type[LOG_CONFIG_ERROR], "Cannot Read Server ip from Config file");
+		exit(1);
+	};
+	check_config_file_member_key(config_key, CONF_SERVERIP);
+
+	temp_check = -1;
+	temp_check = fscanf(fptr, "%s = %s", config_key, config.middleware);
+	if (temp_check == 1)
+	{
+		printf("Cannot Read Middleware from Config file");
+		log_error(error_log_type[LOG_CONFIG_ERROR], "Cannot Read Middleware from Config file");
+		exit(1);
+	};
+
+	check_config_file_member_key(config_key, CONF_MIDDLEWARESTATE);
+
+	temp_check = -1;
+	temp_check = fscanf(fptr, "%s = %s", config_key, config.software_version);
+	if (temp_check == 1)
+	{
+		printf("Cannot Read Software Version from Config file");
+		log_error(error_log_type[LOG_CONFIG_ERROR], "Cannot Read Software Version from Config file");
+		exit(1);
+	};
+	check_config_file_member_key(config_key, CONF_SOFTWARE_VERSION);
 
 	/// printf("%s\n", _, config.srver_ip);
 	/// printf("%s\n", _, config.middleware);
@@ -64,12 +110,14 @@ struct Config read_config_file()
 	return config;
 }
 
+
+
 void check_app_status(APP_STATUS app_status)
 {
 	if (app_status == STOPPED)
 	{
-		printf("Application Down");
-		log_error(error_log_type[LOG_APP_STOPPED], "Application Down");	
+		printf("Application Down...");
+		log_error(error_log_type[LOG_APP_STOPPED], "Application Down");
 		exit(1);
 	}
 }
