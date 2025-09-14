@@ -20,16 +20,6 @@ struct Config {
 };
 
 
-/*
-and that i taken this idea when i maked in c# with flag attribute
-[flags]
-enum Permission
-{
-	Write = 1, Read = 2, Execute = 4,.. and so on.
-	// 3 is to read and write
-}
-*/
-
 struct Config create_default_config();
 
 FILE* create_config_file(struct Config* config_file);

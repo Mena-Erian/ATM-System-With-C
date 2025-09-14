@@ -22,25 +22,29 @@ int main()
 				make one with default values
 	*/
 
-	FILE* fconfig;
-	FILE* fcmd_output;
+	// FILE* fconfig;
+	// FILE* fcmd_output;
 	struct Config config;
 
-	// i know that bad name << maybe will be make some enhancements in the futur
-	if (!is_this_file_name_exist("./configs/atm_config.txt"))
-	{
-		config = create_default_config();
-		fconfig = create_config_file(&config);
-	}
-	else config = read_config_file();
+	/// // i know that bad name << maybe will be make some enhancements in the futur
+	/// if (!is_this_file_name_exist("./configs/atm_config.txt"))
+	/// {
+	/// 	config = create_default_config();
+	/// 	fconfig = create_config_file(&config);
+	/// }
+	/// else config = read_config_file();
 
-	/*
-		Network Check
-	*/
 
+	config = read_config_file();
+	// Network Check
 	if (strcmp(config.middleware, "Up") == 0)
 	{
-		print_ping_status(ping(config.serverip));
+		if (ping(config.serverip) == false)
+		{
+			printf("Error: Network Fauilar");
+			//exit(1);
+		}
+		
 	}
 
 	/// FILE* fp;

@@ -10,6 +10,8 @@
 #include "logutils.h"
 #include "myutils.h"
 
+
+
 bool is_this_file_name_exist(char* file_name_with_path)
 {
 	FILE* file = fopen(file_name_with_path, "r");
@@ -27,27 +29,53 @@ bool is_file_exist(FILE* fptr)
 	return true;
 }
 
+long get_last_number_in_file(FILE* fptr)
+{
+	fseek(fptr, 0, SEEK_END); // go to the end of line
+	long ptr_position = ftell(fptr); //get the possition of pointer in file
+
+	while (ptr_position > 0)
+	{
+		fseek(fptr, --ptr_position, SEEK_END);
+		if (fgetc(fptr) == '\n')
+		{
+			break;
+		}
+	}
+
+	//ptr_position = the start of last line
+
+	char* buffer[150];
+	long number = 0;
+	if (fgets(buffer, sizeof(buffer), fptr) != NULL)
+	{
+		if (sscanf(buffer, "%d", &number) == 1) // return 1 if found number and zero if not
+			return number;
+	}
+	return number;
+}
+
 void log_error(char* msg, char* details) {
 
+	// Create error log text
 	char final_msg[250];
-
-	/*
-		get number of err from file to increment it and Record
-	*/
-
 	time_t now = time(NULL); // get Time In Secondes
 	struct tm* time = localtime(&now);
 	char str_time[20];
 	// timestamp =>
 	strftime(str_time, sizeof(str_time), "%Y-%m-%d %H:%M:%S", time);
 	if (details == NULL)
-		sprintf(final_msg, "E%d: %s Message: %s\n", errno, str_time, msg);
+		sprintf(final_msg, "%s Message: %s\n", str_time, msg);
 	else
-		sprintf(final_msg, "E%d: %s Message: %s, Details: %s\n", errno, str_time, msg, details);
+		sprintf(final_msg, "%s Message: %s, Details: %s\n", str_time, msg, details);
 
-	(void)log_into(ERROR_FILE_PATH, final_msg);
-	//perror("Failed to Log The Error");
+	FILE* fptr = log_into(ERROR_FILE_PATH, final_msg);
+
+	if (fptr == NULL) perror("Failed to Log The Error");
+
+	return;
 }
+
 
 // Maybe Retrun NULL !!
 FILE* log_into(char* file_name_with_path, char* input)
@@ -91,7 +119,6 @@ FILE* open_file(char* file_name_with_path, FileMode mode)
 	return  fptr;
 }
 
-
 /*
 | Mode   | File Exists?                    | File Not Exists?     | Write Behavior with `fprintf`                                               |
 | ------ | ------------------------------- | -------------------- | --------------------------------------------------------------------------- |
@@ -101,4 +128,29 @@ FILE* open_file(char* file_name_with_path, FileMode mode)
 | `"a+"` | Opens at **end of file**        | Creates new file     | Can read & write, but writes always go to end.                              |
 | `"r"`  | Opens existing                  | Error (NULL)         | **Cannot write** (read-only).                                               |
 | `"r+"` | Opens existing                  | Error (NULL)         | Can read & write. Writing starts at beginning (overwrites unless you seek). |
+*/
+
+
+
+/*
+// continue later
+// Maybe Retrun NULL !!
+/// FILE* log_into_with_increment(char* file_name_with_path, char* input)
+/// {
+/// 	FILE* fptr = open_file(file_name_with_path, APPEND | READ);
+///
+/// 	if (is_file_exist(fptr))
+/// 	{
+/// 		int last_num_in_file = (int)get_last_number_in_file(fptr);
+/// 		if (last_num_in_file == 0)
+/// 		{
+/// 			fprintf(fptr, input);
+/// 		}
+/// 		//int
+///
+/// 		return fptr;
+/// 	}
+/// 	else perror(input);
+/// 	return fptr;
+/// }
 */

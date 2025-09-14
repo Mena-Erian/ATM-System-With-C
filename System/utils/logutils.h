@@ -12,13 +12,35 @@ typedef enum FileMode
 
 	// mode = READ | WRITE; << will to be read and write
 }FileMode;
-
+/*
+and that i taken this idea when i maked in c# with flag attribute
+[flags]
+enum Permission
+{
+	Write = 1, Read = 2, Execute = 4,.. and so on.
+	// 3 is to read and write
+}
+*/
 typedef enum LogFileMode
 {
 	NEWFILE = N_WRITEREAD,// w
 	FILEEXISTED = WRITE | READ,// r+
 	//CHECKING = READ
 }LogFileMode;
+
+typedef enum {
+	LOG_NETWORK_FAILURE,
+	LOG_APP_STOPPED,
+	LOG_CONFIG_ERROR,
+	LOG_ERROR_LEN
+} LOG_ERROR_TYPE;
+
+static char* error_log_type[LOG_ERROR_LEN] = {
+	"network failure",
+	"app stopped",
+	"config error"
+};
+
 
 bool is_this_file_name_exist(char* file_name_with_path);
 

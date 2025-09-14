@@ -75,7 +75,7 @@ bool ping(char serverip[20])
 
 	sprintf(command, "ping %s", serverip);
 
-	fcmd_output = _popen(command, "r");
+	fcmd_output = _popen(command, "r");// may we can use here system() // put i used this to 
 	if (fcmd_output == NULL)
 	{
 		perror("Popen Failed");
@@ -84,11 +84,11 @@ bool ping(char serverip[20])
 
 	while (fgets(buffer, sizeof(buffer), fcmd_output) != NULL)
 	{
-		printf("%s", buffer);
+		//printf("%s", buffer); // to see the output of ping in console
 		if (strstr(buffer, "Reply from") != '\0')
 		{
 			is_reachable = true;
-			//print_ping_status(is_reachable); // if neaded
+			//print_ping_status(is_reachable); // if needed
 			break;
 		}
 		is_reachable = false;
@@ -96,7 +96,7 @@ bool ping(char serverip[20])
 
 	if (is_reachable == false)
 	{
-		log_error("network failure", NULL);
+		log_error(error_log_type[LOG_NETWORK_FAILURE], NULL);
 		return false;
 	}
 
