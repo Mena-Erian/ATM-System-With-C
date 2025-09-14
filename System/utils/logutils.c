@@ -30,7 +30,7 @@ bool is_file_exist(FILE* fptr)
 void log_error(char* msg, char* details) {
 
 	char final_msg[250];
-	
+
 	/*
 		get number of err from file to increment it and Record
 	*/
@@ -40,8 +40,10 @@ void log_error(char* msg, char* details) {
 	char str_time[20];
 	// timestamp =>
 	strftime(str_time, sizeof(str_time), "%Y-%m-%d %H:%M:%S", time);
-
-	sprintf(final_msg, "E%d: %s Message: %s %s",errno,str_time, msg, details);
+	if (details == NULL)
+		sprintf(final_msg, "E%d: %s Message: %s\n", errno, str_time, msg);
+	else
+		sprintf(final_msg, "E%d: %s Message: %s, Details: %s\n", errno, str_time, msg, details);
 
 	(void)log_into(ERROR_FILE_PATH, final_msg);
 	//perror("Failed to Log The Error");
